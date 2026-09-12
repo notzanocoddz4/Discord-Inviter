@@ -1,6 +1,6 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Functions.lua"))()
 
-local Root = "https://github.com/RegularVynixu/Discord-Inviter/raw/main"
+local Root = "https://github.com/notzanocoddz4/Discord-Inviter/raw/main"
 
 -- \\ Services // --
 
@@ -35,6 +35,15 @@ local function GetInviteData(invite: string): (boolean?, any?)
     return success, result
 end
 
+local function GetMemberCount(invite: string): (number, number)
+    local success, result = GetInviteData(invite)
+    if not (success and result) then
+        return 0, 0
+    end
+
+    return result.profile.online_count, result.profile.member_count
+end
+
 local function ToggleShowPrompt(promptGui: ScreenGui, state: boolean)
     local frame = promptGui.Holder
     local serverIcon = frame.ServerIcon
@@ -43,40 +52,65 @@ local function ToggleShowPrompt(promptGui: ScreenGui, state: boolean)
     local serverName = frame.ServerName
     local accept = frame.Accept
     local ignore = frame.Ignore
+    local statusContainer = frame.StatusContainer
+    local onlineHolder = statusContainer.OnlineHolder
+    local membersHolder = statusContainer.MembersHolder
+
+    local dotOnline = onlineHolder.DotContainer.Green
+    local dotMembers = membersHolder.DotContainer.White
     
-	if state then
-		frame.Visible = true
-		TweenService:Create(frame, TweenInfo.new(1, Enum.EasingStyle.Quint), { Size = UDim2.new(0.175, 0, 0.175, 0) }):Play()
-		TweenService:Create(frame.UICorner, TweenInfo.new(1, Enum.EasingStyle.Quint), { CornerRadius = UDim.new(0, 8) }):Play()
+    local onlineText = onlineHolder.OnlineText
+    local membersText = membersHolder.MembersText
+
+    local tweeninfo = TweenInfo.new(1, Enum.EasingStyle.Quint)
+    if state then
+        frame.Visible = true
+        TweenService:Create(frame, tweeninfo, { Size = UDim2.new(0, 262, 0, 262) }):Play()
+        TweenService:Create(frame.UICorner, tweeninfo, { CornerRadius = UDim.new(0, 8) }):Play()
+        task.wait(1)
+        TweenService:Create(serverIcon, tweeninfo, { Size = UDim2.new(0, 66, 0, 66) }):Play()
+		TweenService:Create(serverIcon, tweeninfo, { BackgroundTransparency = 0, ImageTransparency = 0 }):Play()
+		TweenService:Create(serverInitials, tweeninfo, { TextTransparency = 0 }):Play()
+        task.wait(0.1)
+        TweenService:Create(invited, tweeninfo, { Size = UDim2.new(0, 237, 0, 19) }):Play()
+        TweenService:Create(invited, tweeninfo, { TextTransparency = 0 }):Play()
+        task.wait(0.1)
+        TweenService:Create(serverName, tweeninfo, { Size = UDim2.new(0, 237, 0, 26) }):Play()
+        TweenService:Create(serverName, tweeninfo, { TextTransparency = 0 }):Play()
+        task.wait(0.1)
+        TweenService:Create(statusContainer, tweeninfo, { Size = UDim2.new(0, 237, 0, 19) }):Play()
+        TweenService:Create(dotOnline, tweeninfo, { BackgroundTransparency = 0 }):Play()
+        TweenService:Create(onlineText, tweeninfo, { TextTransparency = 0 }):Play()
+        TweenService:Create(dotMembers, tweeninfo, { BackgroundTransparency = 0 }):Play()
+        TweenService:Create(membersText, tweeninfo, { TextTransparency = 0 }):Play()
+        task.wait(0.1)
+		TweenService:Create(accept, tweeninfo, { BackgroundTransparency = 0, TextTransparency = 0 }):Play()
+		task.wait(0.1)
+		TweenService:Create(ignore, tweeninfo, { TextTransparency = 0 }):Play()
 		task.wait(1)
-		TweenService:Create(serverIcon, TweenInfo.new(1, Enum.EasingStyle.Quint), { BackgroundTransparency = 0, ImageTransparency = 0 }):Play()
-		TweenService:Create(serverInitials, TweenInfo.new(1, Enum.EasingStyle.Quint), { TextTransparency = 0 }):Play()
+    else
+		TweenService:Create(ignore, tweeninfo, { TextTransparency = 1 }):Play()
 		task.wait(0.1)
-		TweenService:Create(invited, TweenInfo.new(1, Enum.EasingStyle.Quint), { TextTransparency = 0 }):Play()
+		TweenService:Create(accept, tweeninfo, { BackgroundTransparency = 1, TextTransparency = 1 }):Play()
 		task.wait(0.1)
-		TweenService:Create(serverName, TweenInfo.new(1, Enum.EasingStyle.Quint), { TextTransparency = 0 }):Play()
+		TweenService:Create(serverName, tweeninfo, { TextTransparency = 1 }):Play()
 		task.wait(0.1)
-		TweenService:Create(accept, TweenInfo.new(1, Enum.EasingStyle.Quint), { BackgroundTransparency = 0, TextTransparency = 0 }):Play()
+        TweenService:Create(dotOnline, tweeninfo, { BackgroundTransparency = 1 }):Play()
+        TweenService:Create(onlineText, tweeninfo, { TextTransparency = 1 }):Play()
+        TweenService:Create(dotMembers, tweeninfo, { BackgroundTransparency = 1 }):Play()
+        TweenService:Create(membersText, tweeninfo, { TextTransparency = 1 }):Play()
+        TweenService:Create(statusContainer, tweeninfo, { Size = UDim2.new(0, 237, 0, 19) }):Play()
+        task.wait(0.1)
+		TweenService:Create(invited, tweeninfo, { TextTransparency = 1 }):Play()
 		task.wait(0.1)
-		TweenService:Create(ignore, TweenInfo.new(1, Enum.EasingStyle.Quint), { TextTransparency = 0 }):Play()
+		TweenService:Create(serverIcon, tweeninfo, { BackgroundTransparency = 1, ImageTransparency = 1 }):Play()
+		TweenService:Create( serverInitials, tweeninfo, { TextTransparency = 1 }):Play()
 		task.wait(1)
-	else
-		TweenService:Create(ignore, TweenInfo.new(1, Enum.EasingStyle.Quint), { TextTransparency = 1 }):Play()
-		task.wait(0.1)
-		TweenService:Create(accept, TweenInfo.new(1, Enum.EasingStyle.Quint), { BackgroundTransparency = 1, TextTransparency = 1 }):Play()
-		task.wait(0.1)
-		TweenService:Create(serverName, TweenInfo.new(1, Enum.EasingStyle.Quint), { TextTransparency = 1 }):Play()
-		task.wait(0.1)
-		TweenService:Create(invited, TweenInfo.new(1, Enum.EasingStyle.Quint), { TextTransparency = 1 }):Play()
-		task.wait(0.1)
-		TweenService:Create(serverIcon, TweenInfo.new(1, Enum.EasingStyle.Quint), { BackgroundTransparency = 1, ImageTransparency = 1 }):Play()
-		TweenService:Create( serverInitials, TweenInfo.new(1, Enum.EasingStyle.Quint), { TextTransparency = 1 }):Play()
-		task.wait(1)
-		TweenService:Create(frame, TweenInfo.new(1, Enum.EasingStyle.Quint), { Size = UDim2.new() }):Play()
-		TweenService:Create(frame.UICorner, TweenInfo.new(1, Enum.EasingStyle.Quint), { CornerRadius = UDim.new(1, 0) }):Play()
+		TweenService:Create(frame, tweeninfo, { Size = UDim2.new() }):Play()
+		TweenService:Create(frame.UICorner, tweeninfo, { CornerRadius = UDim.new(1, 0) }):Play()
 		task.wait(1)
 		frame.Visible = false
-	end
+    end
 end
 
 -- \\ Main // --
@@ -123,6 +157,8 @@ Module.Prompt = function(self, data: { name: string, invite: string })
 
     if not (success and result) then return end
     
+    local onlineCount, memberCount = GetMemberCount(invite)
+
     -- Invite prompt construction
     local promptGui = Assets.DiscordInvitePrompt:Clone()
     if not promptGui then return end
@@ -134,10 +170,15 @@ Module.Prompt = function(self, data: { name: string, invite: string })
     local accept = holder.Accept
     local ignore = holder.Ignore
 
+    local onlineText = holder.StatusContainer.OnlineHolder.OnlineText
+    local membersText = holder.StatusContainer.MembersHolder.MembersText
+
     -- Setup
     holder.Size = UDim2.new()
     holder.UICorner.CornerRadius = UDim.new(1, 0)
     serverName.Text = name
+    onlineText.Text = `{onlineCount} Online`
+    membersText.Text = `{memberCount} Members`
     accept.Text = `Join <b>{name}</b>`
     
     if result.guild.icon ~= nil then
@@ -161,6 +202,8 @@ Module.Prompt = function(self, data: { name: string, invite: string })
             c.TextTransparency = 1
         elseif c.ClassName == "ImageLabel" then
             c.ImageTransparency = 1
+        elseif c.ClassName == "Frame" then -- dot
+            c.BackgroundTransparency = 1
         end
     end
 
